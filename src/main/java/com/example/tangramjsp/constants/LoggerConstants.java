@@ -12,4 +12,5 @@ public class LoggerConstants {
     public static final String CREATE = " CREATE.";
     public static final String GET_ALL = "GET_ALL_EMPLOYEES.";
 
+    public static final String TABLE = " new table ";
 }

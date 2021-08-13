@@ -39,7 +39,7 @@ public class EmployeeRepository {
             Statement st = connection.createStatement();
             String table = CreateTable.EMPLOYEE;
             st.executeUpdate(table);
-            System.out.println("con");
+            logger.log(Level.INFO, LoggerConstants.TABLE + LoggerConstants.CREATED);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
             e.printStackTrace();
