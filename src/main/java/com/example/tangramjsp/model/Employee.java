@@ -1,4 +1,4 @@
-package com.example.tangramjsp.modelN;
+package com.example.tangramjsp.model;
 
 import java.time.LocalDate;
 import java.util.Objects;

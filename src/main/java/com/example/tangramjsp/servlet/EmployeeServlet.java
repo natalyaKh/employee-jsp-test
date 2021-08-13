@@ -1,8 +1,9 @@
-package com.example.tangramjsp.servler;
+package com.example.tangramjsp.servlet;
 
+import com.example.tangramjsp.constants.LoggerConstants;
 import com.example.tangramjsp.dto.RequestEmployeeDto;
 import com.example.tangramjsp.dto.ResponseEmployeeDto;
-import com.example.tangramjsp.dtoN.EmployeeDTO;
+import com.example.tangramjsp.repo.EmployeeRepository;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,10 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -23,16 +23,18 @@ import java.util.logging.Logger;
 // TODO: 13/08/2021  документашка - сделать, закачать
 // TODO: 13/08/2021 deploy???
 // TODO: 13/08/2021 почистить код
-// TODO: 13/08/2021 логи
 // TODO: 13/08/2021 скрипты для старта
-//@WebServlet (name = "home", urlPatterns = {"/home"})
+
+
 @WebServlet("/")
 public class EmployeeServlet extends HttpServlet {
 
+    static Logger logger = Logger.getLogger(EmployeeServlet.class.getName());
+
     private static final long serialVersionUID = 1L;
-    private EmployeeDTO employeeDTO;
+    private EmployeeRepository employeeRepository;
     public void init() {
-        employeeDTO = new EmployeeDTO();
+        employeeRepository = new EmployeeRepository();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -46,11 +48,8 @@ public class EmployeeServlet extends HttpServlet {
 
         try {
             switch (action) {
-                case "/new":
-                    showNewForm(request, response);
-                    break;
                 case "/insert":
-                    insertUser(request, response);
+                    addEmployee(request, response);
                     break;
                 case "/delete":
                     deleteUser(request, response);
@@ -64,24 +63,34 @@ public class EmployeeServlet extends HttpServlet {
         }
     }
 
+    /**
+     * method that returns list of all {@link com.example.tangramjsp.model.Employee} from DB
+     * @param request {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
+     * @throws SQLException
+     * @throws IOException
+     * @throws ServletException
+     */
     private void listUser(HttpServletRequest request, HttpServletResponse response)
         throws SQLException, IOException, ServletException {
-        List<ResponseEmployeeDto> employee = employeeDTO.selectAllEmployees();
+        logger.log(Level.INFO, LoggerConstants.GOT_REQUEST_FOR_OPERATION + LoggerConstants.GET_ALL);
+        List<ResponseEmployeeDto> employee = employeeRepository.selectAllEmployees();
         request.setAttribute("employees", employee);
         RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
-        System.out.println(dispatcher);
         dispatcher.forward(request, response);
     }
 
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("employee-form.jsp");
-        dispatcher.forward(request, response);
-    }
 
-    private void insertUser(HttpServletRequest request, HttpServletResponse response)
+    /**
+     * method that creates {@link com.example.tangramjsp.model.Employee}
+     * @param request {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
+     * @throws SQLException
+     * @throws IOException
+     */
+    private void addEmployee(HttpServletRequest request, HttpServletResponse response)
         throws SQLException, IOException {
-        System.out.println("hihi");
+        logger.log(Level.INFO, LoggerConstants.GOT_REQUEST_FOR_OPERATION + LoggerConstants.CREATE);
         RequestEmployeeDto employeeDto = new RequestEmployeeDto(
             Long.valueOf(request.getParameter("tz")),
             request.getParameter("name"),
@@ -89,14 +98,22 @@ public class EmployeeServlet extends HttpServlet {
             request.getParameter("birthday"),
             request.getParameter("startWork")
             );
-        employeeDTO.insertEmployee(employeeDto);
+        employeeRepository.insertEmployee(employeeDto);
         response.sendRedirect("list");
     }
 
+    /**
+     * method that deletes {@link com.example.tangramjsp.model.Employee}
+     * @param request {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
+     * @throws SQLException
+     * @throws IOException
+     */
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
         throws SQLException, IOException {
+        logger.log(Level.INFO, LoggerConstants.GOT_REQUEST_FOR_OPERATION + LoggerConstants.DELETE);
         long tz = Long.valueOf(request.getParameter("tz"));
-        employeeDTO.deleteUser(tz);
+        employeeRepository.deleteEmployeeByTz(tz);
         response.sendRedirect("list");
 
     }
