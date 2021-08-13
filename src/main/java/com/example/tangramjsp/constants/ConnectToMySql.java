@@ -6,8 +6,8 @@ package com.example.tangramjsp.constants;
 public class ConnectToMySql {
     public static String JDBC_URL = "jdbc:mysql://localhost:3306/empl?useSSL=false";
     public static String JDBC_USER_NAME = "root";
-    public static String JDBC_PASSWORD = "yellow00";
-
+    public static String JDBC_PASSWORD = "root";
+public static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
 
     public static  String INSERT_USERS_SQL = "INSERT INTO employees" +

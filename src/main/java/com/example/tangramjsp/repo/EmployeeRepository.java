@@ -1,10 +1,11 @@
 package com.example.tangramjsp.repo;
 
 import com.example.tangramjsp.constants.ConnectToMySql;
+import com.example.tangramjsp.constants.ConnectToPostgress;
 import com.example.tangramjsp.constants.LoggerConstants;
 import com.example.tangramjsp.dto.RequestEmployeeDto;
 import com.example.tangramjsp.dto.ResponseEmployeeDto;
-import com.example.tangramjsp.script.CreateTable;
+import com.example.tangramjsp.script.CreateTablePostgress;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  * table employees in the database.
  */
 public class EmployeeRepository {
-    static final Logger  logger = Logger.getLogger(EmployeeRepository.class.getName());
+    static final Logger logger = Logger.getLogger(EmployeeRepository.class.getName());
 
     public EmployeeRepository() {
     }
@@ -27,17 +28,18 @@ public class EmployeeRepository {
 
     /**
      * method that creates connection to DB
+     *
      * @return {@link Connection} link for connect to DB
-     * @throws  {@link SQLException), {@link ClassNotFoundException}
+     * @throws {@link SQLException), {@link ClassNotFoundException}
      */
     protected Connection getConnection() {
         Connection connection = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(ConnectToMySql.JDBC_URL, ConnectToMySql.JDBC_USER_NAME,
-                ConnectToMySql.JDBC_PASSWORD);
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(ConnectToPostgress.JDBC_URL, ConnectToPostgress.JDBC_USER_NAME,
+                ConnectToPostgress.JDBC_PASSWORD);
             Statement st = connection.createStatement();
-            String table = CreateTable.EMPLOYEE;
+            String table = CreateTablePostgress.EMPLOYEE;
             st.executeUpdate(table);
             logger.log(Level.INFO, LoggerConstants.TABLE + LoggerConstants.CREATED);
         } catch (SQLException e) {
@@ -53,10 +55,11 @@ public class EmployeeRepository {
 
     /**
      * method that save new {@link com.example.tangramjsp.model.Employee} to DB
+     *
      * @param empl {@link RequestEmployeeDto}
      * @throws {@link SQLException)
      */
-    public void insertEmployee(RequestEmployeeDto empl){
+    public void insertEmployee(RequestEmployeeDto empl) {
         // try-with-resource statement will auto close the connection.
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
             ConnectToMySql.INSERT_USERS_SQL)) {
@@ -75,6 +78,7 @@ public class EmployeeRepository {
 
     /**
      * method that got all employees from DB
+     *
      * @return list of {@link ResponseEmployeeDto}
      * @throws {@link SQLException)
      */
