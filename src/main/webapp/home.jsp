@@ -2,6 +2,7 @@
 <%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.net.InetAddress" %>
+<%@ page import="java.time.LocalDate" %>
 
 
 <!doctype html>
@@ -36,33 +37,33 @@
                     <div class="form-group ">
                         <label for="tz">TZ</label>
                         <div id="id">
-                            <input name="tz" type="number" class="form-control" id="tz"
+                            <input required min="0" name="tz" type="number" class="form-control" id="tz"
                                    placeholder="An identification number">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="name" class="col-form-label">Name</label>
                         <div>
-                            <input name="name" type="text" class="form-control" id="name" placeholder="Name">
+                            <input required name="name" type="text" class="form-control" id="name" placeholder="Name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="lastName" class="col-form-label">Surname</label>
                         <div class="">
-                            <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Surname">
+                            <input required name="lastName" type="text" class="form-control" id="lastName" placeholder="Surname">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="startWork" class=" col-form-label">Date start</label>
                         <div class="">
-                            <input name="startWork" type="date" class="form-control" id="startWork"
+                            <input required max="<%=LocalDate.now()%>" name="startWork" type="date" class="form-control" id="startWork"
                                    placeholder="date of commencement of work">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="birthday" class=" col-form-label">Birthday</label>
                         <div class="">
-                            <input name="birthday" type="date" class="form-control" id="birthday"
+                            <input required type="date" max="<%=LocalDate.now().minusYears(15)%>" name="birthday"  class="form-control" id="birthday"
                                    placeholder="Date of Birth">
                         </div>
                     </div>
@@ -76,6 +77,7 @@
     </div>
 </div>
 </div>
+
 
 <div class="card">
     <div style="text-align: center" class="card-body"><H2> Employee`s table</H2>
@@ -131,9 +133,7 @@
 
     </div>
 </div>
-<script>
 
-</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
