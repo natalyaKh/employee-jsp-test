@@ -35,9 +35,9 @@
             <div class="modal-body">
                 <form id="sendForm" action="/tangramjpatest/insert" method="post">
                     <div class="form-group ">
-                        <label for="tz">TZ</label>
+                        <label for="tz">TZ (min 4 symbols)</label>
                         <div id="id">
-                            <input required min="0" name="tz" type="number" class="form-control" id="tz"
+                            <input required min="1000" name="tz" type="number" class="form-control" id="tz"
                                    placeholder="An identification number">
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="birthday" class=" col-form-label">Birthday</label>
+                        <label for="birthday" class=" col-form-label">Birthday (age of employee min 15 years old)</label>
                         <div class="">
                             <input required type="date" max="<%=LocalDate.now().minusYears(15)%>" name="birthday"  class="form-control" id="birthday"
                                    placeholder="Date of Birth">
