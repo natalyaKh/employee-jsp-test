@@ -1,0 +1,6 @@
+com.example.tangramjsp.constants
+com.example.tangramjsp.dto
+com.example.tangramjsp.model
+com.example.tangramjsp.repo
+com.example.tangramjsp.script
+com.example.tangramjsp.servlet
