@@ -33,7 +33,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="sendForm" action="/tangramjpatest/insert" method="post">
+                <form id="sendForm" action="insert" method="post">
                     <div class="form-group ">
                         <label for="tz">TZ (min 4 symbols)</label>
                         <div id="id">

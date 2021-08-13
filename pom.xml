@@ -58,7 +58,7 @@
 
 
     <build>
-        <finalName>TangramTestJsp</finalName>
+        <finalName>tangr-jsp</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
