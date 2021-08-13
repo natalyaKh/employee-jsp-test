@@ -1,8 +1,10 @@
 package com.example.tangramjsp.repo;
 
+import com.example.tangramjsp.constants.ConnectToMySql;
 import com.example.tangramjsp.constants.LoggerConstants;
 import com.example.tangramjsp.dto.RequestEmployeeDto;
 import com.example.tangramjsp.dto.ResponseEmployeeDto;
+import com.example.tangramjsp.script.CreateTable;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -19,20 +21,9 @@ import java.util.logging.Logger;
 public class EmployeeRepository {
     static final Logger  logger = Logger.getLogger(EmployeeRepository.class.getName());
 
-    private final String jdbcURL = "jdbc:mysql://localhost:3306/empl?useSSL=false";
-    private final String jdbcUsername = "root";
-    private final String jdbcPassword = "yellow00";
-
-
-    private static final String INSERT_USERS_SQL = "INSERT INTO users" +
-        "  (tz, name, lastName, birthday, startWork) VALUES " +
-        " (?, ?, ?, ?, ?);";
-
-    private static final String SELECT_ALL_USERS = "select * from users";
-    private static final String DELETE_USERS_SQL = "delete from users where tz = ?;";
-
     public EmployeeRepository() {
     }
+
 
     /**
      * method that creates connection to DB
@@ -43,7 +34,12 @@ public class EmployeeRepository {
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+            connection = DriverManager.getConnection(ConnectToMySql.JDBC_URL, ConnectToMySql.JDBC_USER_NAME,
+                ConnectToMySql.JDBC_PASSWORD);
+            Statement st = connection.createStatement();
+            String table = CreateTable.EMPLOYEE;
+            st.executeUpdate(table);
+            System.out.println("con");
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
             e.printStackTrace();
@@ -62,7 +58,8 @@ public class EmployeeRepository {
      */
     public void insertEmployee(RequestEmployeeDto empl){
         // try-with-resource statement will auto close the connection.
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
+            ConnectToMySql.INSERT_USERS_SQL)) {
             preparedStatement.setLong(1, empl.getTz());
             preparedStatement.setString(2, empl.getName());
             preparedStatement.setString(3, empl.getLastName());
@@ -88,7 +85,7 @@ public class EmployeeRepository {
         // Step 1: Establishing a Connection
         try (Connection connection = getConnection();
              // Step 2:Create a statement using connection object
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(ConnectToMySql.SELECT_ALL_USERS)) {
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
             // Step 4: Process the ResultSet object.
@@ -116,7 +113,8 @@ public class EmployeeRepository {
      */
     public boolean deleteEmployeeByTz(long tz) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL)) {
+        try (Connection connection = getConnection(); PreparedStatement statement =
+            connection.prepareStatement(ConnectToMySql.DELETE_USERS_SQL)) {
             statement.setLong(1, tz);
             rowDeleted = statement.executeUpdate() > 0;
         }
