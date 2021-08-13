@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 @WebServlet("/")
 public class EmployeeServlet extends HttpServlet {
 
-    static Logger logger = Logger.getLogger(EmployeeServlet.class.getName());
+    static final Logger logger = Logger.getLogger(EmployeeServlet.class.getName());
 
     private static final long serialVersionUID = 1L;
     private EmployeeRepository employeeRepository;

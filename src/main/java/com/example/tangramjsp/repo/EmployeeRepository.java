@@ -17,11 +17,11 @@ import java.util.logging.Logger;
  * table employees in the database.
  */
 public class EmployeeRepository {
-    static Logger logger = Logger.getLogger(EmployeeRepository.class.getName());
+    static final Logger  logger = Logger.getLogger(EmployeeRepository.class.getName());
 
-    private String jdbcURL = "jdbc:mysql://localhost:3306/empl?useSSL=false";
-    private String jdbcUsername = "root";
-    private String jdbcPassword = "yellow00";
+    private final String jdbcURL = "jdbc:mysql://localhost:3306/empl?useSSL=false";
+    private final String jdbcUsername = "root";
+    private final String jdbcPassword = "yellow00";
 
 
     private static final String INSERT_USERS_SQL = "INSERT INTO users" +
@@ -88,7 +88,7 @@ public class EmployeeRepository {
         // Step 1: Establishing a Connection
         try (Connection connection = getConnection();
              // Step 2:Create a statement using connection object
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS)) {
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
             // Step 4: Process the ResultSet object.
@@ -116,7 +116,7 @@ public class EmployeeRepository {
      */
     public boolean deleteEmployeeByTz(long tz) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);) {
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL)) {
             statement.setLong(1, tz);
             rowDeleted = statement.executeUpdate() > 0;
         }
